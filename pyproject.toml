@@ -1,0 +1,50 @@
+[project]
+name = "phthalo-green"
+version = "0.1.0"
+description = "Phthalo Green academic matplotlib style: palette, presets, and publication export helpers."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Your Name", email = "you@example.com" }
+]
+keywords = ["matplotlib", "visualization", "academic", "thesis", "publication", "figures"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+# Minimal extra for seaborn users: pip install "phthalo-green[seaborn]"
+seaborn = ["seaborn>=0.13"]
+# Everything needed to run examples/02_gallery.py
+gallery = [
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "seaborn>=0.13",
+    "wordcloud>=1.9",
+]
+dev = ["ruff", "pytest"]
+
+[project.urls]
+Repository = "https://github.com/YOUR_USERNAME/phthalo-green"
+Issues = "https://github.com/YOUR_USERNAME/phthalo-green/issues"
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv_build]
+module-name = "phthalo_green"
+module-root = "src"
+
+[tool.ruff]
+line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

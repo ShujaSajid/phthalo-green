@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+# Library convention: don't commit lockfile (apps pin it in consumers).
+# Remove this line if you want reproducible example runs via committed uv.lock.
+uv.lock
+# Build / install artifacts
+dist/
+build/
+*.egg-info/
+.uv/
+# Generated figures (recursive — covers figures/ and figures/gallery/)
+figures/**/*.pdf
+figures/**/*.png
+figures/**/*.svg
+figures/**/*.eps
+figures/*.pdf
+figures/*.png
+figures/*.svg
+figures/*.eps
+!figures/.gitkeep
+!figures/gallery/.gitkeep
