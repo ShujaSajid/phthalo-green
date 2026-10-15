@@ -1,7 +1,7 @@
 [project]
 name = "phthalo-green"
-version = "0.1.0"
-description = "Phthalo Green academic matplotlib style: palette, presets, and publication export helpers."
+version = "0.1.1"
+description = "Phthalo Green academic matplotlib style: palettes, themes, presets, and publication export helpers."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -22,7 +22,9 @@ dependencies = [
 [project.optional-dependencies]
 # Minimal extra for seaborn users: pip install "phthalo-green[seaborn]"
 seaborn = ["seaborn>=0.13"]
-# Everything needed to run examples/02_gallery.py
+# Plotly support via pg.apply_plotly_theme()
+plotly = ["plotly>=5.15"]
+# Everything needed to run examples/ and the CLI preview command
 gallery = [
     "numpy>=1.26",
     "pandas>=2.2",
@@ -30,6 +32,9 @@ gallery = [
     "wordcloud>=1.9",
 ]
 dev = ["ruff", "pytest"]
+
+[project.scripts]
+phthalo-green = "phthalo_green.cli:main"
 
 [project.urls]
 Repository = "https://github.com/YOUR_USERNAME/phthalo-green"
@@ -39,7 +44,7 @@ Issues = "https://github.com/YOUR_USERNAME/phthalo-green/issues"
 requires = ["uv_build>=0.7.19,<0.13"]
 build-backend = "uv_build"
 
-[tool.uv_build]
+[tool.uv.build-backend]
 module-name = "phthalo_green"
 module-root = "src"
 

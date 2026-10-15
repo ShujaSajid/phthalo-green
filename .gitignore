@@ -13,6 +13,7 @@ build/
 *.egg-info/
 .uv/
 # Generated figures (recursive — covers figures/ and figures/gallery/)
+figures/**/*.mplstyle
 figures/**/*.pdf
 figures/**/*.png
 figures/**/*.svg
