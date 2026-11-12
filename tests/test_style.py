@@ -423,7 +423,13 @@ def test_plotly_theme_requires_plotly():
     import phthalo_green as pg
 
     pg.apply_plotly_theme("indigo")
-    assert plotly.io.templates["indigo"] == pg.plotly_template("indigo")
+    registered = plotly.io.templates["indigo"].to_plotly_json()
+    expected = pg.plotly_template("indigo")
+    assert registered["layout"] == expected["layout"]
+    for trace_type, expected_trace in expected["data"].items():
+        registered_trace = registered["data"][trace_type][0].copy()
+        registered_trace.pop("type", None)
+        assert registered_trace == expected_trace[0]
 
 
 def test_seaborn_style():

@@ -1062,7 +1062,15 @@ def register_colormaps(
     for cmap in resolved.cmaps().values():
         stale = _REGISTERED_CMAPS.get(cmap.name) is not cmap
         if force or stale or cmap.name not in mpl.colormaps:
-            mpl.colormaps.register(cmap, force=cmap.name in mpl.colormaps)
+            replacing = cmap.name in mpl.colormaps
+            with warnings.catch_warnings():
+                if replacing:
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=r"Overwriting the cmap .*",
+                        category=UserWarning,
+                    )
+                mpl.colormaps.register(cmap, force=replacing)
             _REGISTERED_CMAPS[cmap.name] = cmap
     return names
 
@@ -1518,7 +1526,7 @@ def _plotly_axis(resolved: Theme) -> dict[str, Any]:
         "ticklen": 4,
         "tickwidth": 0.8,
         "tickcolor": resolved["slate"],
-        "title": {"color": resolved["charcoal"]},
+        "title": {"font": {"color": resolved["charcoal"]}},
         "mirror": False,
         "showline": True,
     }
@@ -1565,7 +1573,6 @@ def plotly_template(
             "colorscale": {
                 "sequential": _plotly_colorscale(resolved.sequential),
                 "diverging": _plotly_colorscale(resolved.diverging),
-                "categorical": _plotly_colorscale(resolved.categorical),
             },
             "hoverlabel": {
                 "bgcolor": resolved["background"],

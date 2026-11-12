@@ -26,32 +26,31 @@ Publish this repo to GitHub, tag a version, then in any other project:
 
 ```powershell
 # with uv (recommended)
-uv add "phthalo-green @ git+https://github.com/YOUR_USERNAME/phthalo-green.git@v0.1.0"
+uv add "phthalo-green @ git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
 
 # with pip
-pip install "git+https://github.com/YOUR_USERNAME/phthalo-green.git@v0.1.0"
+pip install "git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
 ```
 
-Update `YOUR_USERNAME` in `pyproject.toml` (`[project.urls]`) before pushing.
 Create the tag after pushing:
 
 ```powershell
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 Depend on a branch/commit during development:
 
 ```powershell
-uv add "phthalo-green @ git+https://github.com/YOUR_USERNAME/phthalo-green.git@main"
+uv add "phthalo-green @ git+https://github.com/ShujaSajid/phthalo-green.git@main"
 ```
 
 Optional extras in the consumer project:
 
 ```powershell
-uv add "phthalo-green[seaborn] @ git+https://github.com/YOUR_USERNAME/phthalo-green.git@v0.1.0"
-uv add "phthalo-green[plotly]  @ git+https://github.com/YOUR_USERNAME/phthalo-green.git@v0.1.0"
-uv add "phthalo-green[gallery] @ git+https://github.com/YOUR_USERNAME/phthalo-green.git@v0.1.0"
+uv add "phthalo-green[seaborn] @ git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
+uv add "phthalo-green[plotly]  @ git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
+uv add "phthalo-green[gallery] @ git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
 ```
 
 ### Option B — Vendor single file (no install, best for submission repos)
@@ -67,8 +66,8 @@ from phthalo_green import subplots, export_figure
 `style.py` is self-contained (only needs `matplotlib`) and carries the default
 Phthalo Green palette plus `register_palette()` for your own.
 
-> PyPI (`uv add phthalo-green` with no URL) is intentionally not set up yet.
-> It will be added later with `uv build` + `uv publish`. GitHub install above is all you need.
+> This project is currently installed directly from GitHub rather than PyPI.
+> Once it is published, `uv add phthalo-green` can be used without the Git URL.
 
 ## Daily use
 
@@ -108,6 +107,19 @@ pg.export_figure(fig, "figures/my_fig", formats=("pdf", "png"))
 | `single_column` | 3.4 × 2.6 | Narrow single column |
 | `double_column` | 7.0 × 4.2 | Wide two-column |
 | `presentation` | 10.0 × 6.0 | Slides/talks |
+
+Choose a preset based on the physical size of the final figure:
+
+| Preset | Recommended use |
+| --- | --- |
+| `single_column` | Narrow single-column journal figures |
+| `journal` | Standard paper figures and conservative journal layouts |
+| `thesis` | Thesis chapters, dissertations, and reports |
+| `double_column` | Full-width figures spanning two journal columns |
+| `presentation` | Conference talks, lectures, and large-screen slides |
+
+These dimensions are starting points. Use `figure_width` and `figure_height`
+when your venue specifies exact column dimensions.
 
 Override anything inline:
 
@@ -155,6 +167,21 @@ with pg.with_theme("phthalo_green"):      # temporary
     fig, ax = pg.subplots()
 
 with pg.styled("journal", theme="indigo"):# temporary style + theme
+    ...
+```
+
+`apply_style()` and `set_theme()` change Matplotlib's process-wide settings.
+That is useful when every subsequent figure in a script should use the same
+style. In a notebook or a project that combines multiple styles, prefer
+`styled()` or `with_theme()` so the previous settings are restored when the
+block ends.
+
+```python
+pg.apply_style(preset="journal")  # global rcParams change
+pg.set_theme("indigo")             # global active theme change
+
+with pg.styled("thesis", theme="phthalo_green"):
+    # temporary style and theme; both are restored afterward
     ...
 ```
 
@@ -233,7 +260,9 @@ uv run phthalo-green preview figures/preview
 uv build
 ```
 
-`pytest` also works without installing (`conftest.py` adds `src/` to the path).
+The package supports Python 3.9 and newer. `pytest` also works without
+installing the package (`conftest.py` adds `src/` to the path), but the `dev`
+extra must be installed first.
 Gallery output goes to `figures/gallery/` (git-ignored). Core library needs
 only `matplotlib`; `numpy/pandas/seaborn/wordcloud/plotly` are optional extras
 for `examples/` and the CLI.

@@ -5,7 +5,7 @@ theme system, helper APIs for Seaborn and Plotly, a figure-export layer, a
 color-utility toolkit, and a command-line interface.
 
 **Version:** 0.1.1
-**Python:** ≥ 3.10 (code is 3.9-compatible via `from __future__ import annotations`)
+**Python:** ≥ 3.9
 **Core dependency:** `matplotlib` only. Seaborn / Plotly / pandas are optional.
 
 ---
@@ -70,12 +70,21 @@ Your figure now uses:
 ### From source (development)
 
 ```bash
-git clone https://github.com/yourname/phthalo-green.git
+git clone https://github.com/ShujaSajid/phthalo-green.git
 cd phthalo-green
 uv sync --extra dev        # or: pip install -e ".[dev]"
 ```
 
-### As a package
+### From GitHub in another project
+
+This project is currently distributed through GitHub rather than PyPI:
+
+```bash
+pip install "git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
+uv add "phthalo-green @ git+https://github.com/ShujaSajid/phthalo-green.git@v0.1.1"
+```
+
+### As a package (after PyPI publication)
 
 ```bash
 pip install phthalo-green                  # core (matplotlib only)
@@ -195,6 +204,36 @@ pg.apply_style(preset="journal")
 | `presentation`  | 13.0      | 10.0 × 6.0    | 2.5        | 7.0         | Slides / beamer            |
 | `single_column` | 8.5       | 3.4 × 2.6     | 1.6        | 4.0         | Single journal column      |
 | `double_column` | 9.0       | 7.0 × 4.2     | 1.8        | 4.5         | Full journal width         |
+
+Use `single_column` or `double_column` when the publisher specifies a column
+width. Use `thesis` for dissertation and report figures, and `presentation`
+when the figure will be viewed from a distance. Override the dimensions when
+your venue provides exact measurements.
+
+### Global and temporary styling
+
+`apply_style()` writes to Matplotlib's global `rcParams`, so all subsequently
+created figures use that style until another style replaces it:
+
+```python
+pg.apply_style(preset="journal")
+```
+
+`set_theme()` changes the active theme globally, including the live palette
+containers, color cycle, and registered colormaps:
+
+```python
+pg.set_theme("indigo")
+```
+
+For notebooks or scripts that mix styles, use a context manager instead:
+
+```python
+with pg.styled("journal", theme="indigo"):
+    fig, ax = plt.subplots()
+    ax.plot([0, 1], [0, 1])
+# Previous rcParams and theme are restored here.
+```
 
 ### Override any preset value inline
 
